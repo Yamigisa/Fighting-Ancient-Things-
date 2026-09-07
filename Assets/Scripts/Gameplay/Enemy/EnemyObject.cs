@@ -13,6 +13,9 @@ public class EnemyObject : MonoBehaviour
     private Movement movement;
     private int destinationDamage;
     private bool hasCustomPath;
+    private int goldReward;
+    private int diamondReward;
+    private bool rewardsDropped;
 
     private void Awake()
     {
@@ -36,6 +39,8 @@ public class EnemyObject : MonoBehaviour
             enemySO.attackType);
         movement.Initialize(enemySO.moveSpeed, initialMoveDirection);
         destinationDamage = Mathf.Max(1, enemySO.destinationDamage);
+        goldReward = Mathf.Max(0, enemySO.goldReward);
+        diamondReward = Mathf.Max(0, enemySO.diamondReward);
     }
 
     private void Update()
@@ -91,6 +96,22 @@ public class EnemyObject : MonoBehaviour
 
     private void OnDestroy()
     {
+        DropRewards();
         Destroyed?.Invoke(this);
+    }
+
+    private void DropRewards()
+    {
+        if (rewardsDropped)
+            return;
+
+        rewardsDropped = true;
+        if (ResourceManager.Instance == null)
+            return;
+
+        if (goldReward > 0)
+            ResourceManager.Instance.CollectFromWorld(ResourceType.Gold, goldReward, transform.position);
+        if (diamondReward > 0)
+            ResourceManager.Instance.CollectFromWorld(ResourceType.Diamond, diamondReward, transform.position);
     }
 }

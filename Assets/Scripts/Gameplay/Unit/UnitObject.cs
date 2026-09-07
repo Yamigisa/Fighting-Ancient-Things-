@@ -7,6 +7,8 @@ public class UnitObject : MonoBehaviour
     [SerializeField] private UnitSO unitSO;
     private Attack attack;
 
+    public UnitSO UnitData => unitSO;
+
     private void Awake()
     {
         Health health = GetComponent<Health>() ?? gameObject.AddComponent<Health>();
@@ -24,6 +26,7 @@ public class UnitObject : MonoBehaviour
             unitSO.maxTargets, unitSO.attacksPerSecond, unitSO.projectilePrefab, unitSO.projectileSpeed, unitSO.projectileLifetime,
             unitSO.attackType);
         goldProducer.Initialize(unitSO.goldProduced, unitSO.goldProductionInterval);
+        SkillTreeManager.Instance?.ApplyBonusesTo(this);
     }
 
     private void OnDisable()
@@ -44,9 +47,34 @@ public class UnitObject : MonoBehaviour
             attack.SetRangePreviewVisible(false);
     }
 
+    private void OnMouseDown()
+    {
+        if (GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase)
+            return;
+
+        if (PlacementSystem.Instance != null && !PlacementSystem.Instance.IsPlacementMode)
+            PlacementSystem.Instance.StartMovingUnit(this);
+    }
+
     public void SetAttackRangeVisible(bool isVisible)
     {
         if (attack != null)
             attack.SetRangePreviewVisible(isVisible);
+    }
+
+    public void ApplySkillBonus(GeneralSkillEffect effect, float amount)
+    {
+        switch (effect)
+        {
+            case GeneralSkillEffect.Health:
+                GetComponent<Health>()?.AddHealth(Mathf.RoundToInt(amount));
+                break;
+            case GeneralSkillEffect.Attack:
+                attack?.AddDamage(Mathf.RoundToInt(amount));
+                break;
+            case GeneralSkillEffect.AttackSpeed:
+                attack?.AddAttackSpeed(amount);
+                break;
+        }
     }
 }

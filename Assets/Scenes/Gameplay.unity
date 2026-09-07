@@ -1942,6 +1942,7 @@ GameObject:
   - component: {fileID: 922337203685477002}
   - component: {fileID: 922337203685477003}
   - component: {fileID: 922337203685477004}
+  - component: {fileID: 922337203685477005}
   m_Layer: 0
   m_Name: Wave Manager
   m_TagString: Untagged
@@ -2016,6 +2017,81 @@ MonoBehaviour:
   enemySpawner: {fileID: 922337203685477003}
   startWaveButton: {fileID: 181385113}
   startWaveButtonText: {fileID: 369403695}
+  spawnIndicatorColor: {r: 1, g: 0.3, b: 0.1, a: 0.85}
+  indicatorFlashSpeed: 2
+  indicatorTravelSpeed: 0.35
+--- !u!114 &922337203685477005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 922337203685477001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54f22c7b7ad94fd3b26ca8b6cc359f01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generalNodes:
+  - nodeId: vitality_1
+    title: Reinforced Frames
+    description: +2 health for every unit.
+    diamondCost: 2
+    category: 0
+    effect: 0
+    amount: 2
+    requiredNodeIds: []
+    unlocked: 0
+  - nodeId: offense_1
+    title: Sharpened Weapons
+    description: +1 attack damage for every unit.
+    diamondCost: 2
+    category: 1
+    effect: 1
+    amount: 1
+    requiredNodeIds: []
+    unlocked: 0
+  - nodeId: tempo_1
+    title: Rapid Training
+    description: +0.25 attacks per second for every unit.
+    diamondCost: 3
+    category: 2
+    effect: 2
+    amount: 0.25
+    requiredNodeIds:
+    - vitality_1
+    - offense_1
+    unlocked: 0
+  - nodeId: vitality_2
+    title: Fortified Core
+    description: +4 health for every unit.
+    diamondCost: 4
+    category: 0
+    effect: 0
+    amount: 4
+    requiredNodeIds:
+    - vitality_1
+    unlocked: 0
+  - nodeId: offense_2
+    title: Lethal Rounds
+    description: +2 attack damage for every unit.
+    diamondCost: 4
+    category: 1
+    effect: 1
+    amount: 2
+    requiredNodeIds:
+    - offense_1
+    unlocked: 0
+  - nodeId: tempo_2
+    title: Rapid Fire
+    description: +0.35 attacks per second for every unit.
+    diamondCost: 5
+    category: 2
+    effect: 2
+    amount: 0.35
+    requiredNodeIds:
+    - tempo_1
+    unlocked: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

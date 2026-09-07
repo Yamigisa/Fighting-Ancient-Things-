@@ -12,6 +12,9 @@ public class GamePhaseManager : MonoBehaviour
     [SerializeField] private Button startWaveButton;
     [SerializeField] private TextMeshProUGUI startWaveButtonText;
 
+    [Header("Wave Rewards")]
+    [Min(0)] [SerializeField] private int diamondsPerClearedWave = 2;
+
     [Header("Build-Phase Spawn Indicators")]
     [SerializeField] private Color spawnIndicatorColor = new(1f, 0.3f, 0.1f, 0.85f);
     [Min(0.1f)] [SerializeField] private float indicatorFlashSpeed = 2f;
@@ -97,6 +100,18 @@ public class GamePhaseManager : MonoBehaviour
     {
         SetPhase(GamePhase.Build);
         RefreshStartWaveButton();
+        SkillTreeManager.Instance?.Show();
+    }
+
+    public void HandleWaveCleared()
+    {
+        if (diamondsPerClearedWave <= 0 || ResourceManager.Instance == null)
+            return;
+
+        Vector3 rewardOrigin = EnemyDestination.Instance != null
+            ? EnemyDestination.Instance.transform.position
+            : Vector3.zero;
+        ResourceManager.Instance.CollectFromWorld(ResourceType.Diamond, diamondsPerClearedWave, rewardOrigin);
     }
 
     private void SetPhase(GamePhase phase)

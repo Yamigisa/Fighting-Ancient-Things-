@@ -56,6 +56,16 @@ public class Attack : MonoBehaviour
         priorityTarget = target;
     }
 
+    public void AddDamage(int amount)
+    {
+        damage = Mathf.Max(0, damage + amount);
+    }
+
+    public void AddAttackSpeed(float amount)
+    {
+        attacksPerSecond = Mathf.Max(0f, attacksPerSecond + amount);
+    }
+
     private void TryAttack()
     {
         if (owner == null || owner.IsDead || !HasAttackArea || attacksPerSecond <= 0f || Time.time < nextAttackTime)

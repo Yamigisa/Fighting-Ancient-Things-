@@ -72,6 +72,7 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitUntil(() => activeEnemies.Count == 0);
         currentWaveIndex++;
         waveCoroutine = null;
+        GamePhaseManager.Instance?.HandleWaveCleared();
         GamePhaseManager.Instance?.EndCombat();
     }
 

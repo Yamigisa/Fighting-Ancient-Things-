@@ -26,4 +26,10 @@ public class Health : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void AddHealth(int amount)
+    {
+        if (!isDead && amount > 0)
+            currentHealth += amount;
+    }
 }

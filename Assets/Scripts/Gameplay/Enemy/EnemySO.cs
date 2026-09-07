@@ -19,6 +19,12 @@ public class EnemySO : ScriptableObject
     [Min(1)]
     public int destinationDamage = 1;
 
+    [Header("Rewards")]
+    [Min(0)] [Tooltip("Gold awarded when this enemy is removed.")]
+    public int goldReward = 1;
+    [Min(0)] [Tooltip("Diamonds awarded when this enemy is removed.")]
+    public int diamondReward;
+
     [Header("Attack")]
     public int attack;
 
