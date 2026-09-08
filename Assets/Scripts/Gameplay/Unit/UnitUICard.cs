@@ -7,7 +7,7 @@ public class UnitUICard : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI unitCostText;
 
-    [Header("Affordability Visuals")] [Range(0f, 1f)][SerializeField] private float unaffordableAlpha = 0.5f;
+    [Header("Affordability Visuals")][Range(0f, 1f)][SerializeField] private float unaffordableAlpha = 0.5f;
     private CanvasGroup cardCanvasGroup;
     private UnitSO unitSO;
 
@@ -25,20 +25,16 @@ public class UnitUICard : MonoBehaviour
 
     private void OnEnable()
     {
-        if (ResourceManager.Instance != null)
-            ResourceManager.Instance.ResourceChanged += HandleResourceChanged;
-        if (GamePhaseManager.Instance != null)
-            GamePhaseManager.Instance.PhaseChanged += HandlePhaseChanged;
+        ResourceManager.Instance.ResourceChanged += HandleResourceChanged;
+        GamePhaseManager.PhaseChanged += HandlePhaseChanged;
 
         RefreshBuyButton();
     }
 
     private void OnDisable()
     {
-        if (ResourceManager.Instance != null)
-            ResourceManager.Instance.ResourceChanged -= HandleResourceChanged;
-        if (GamePhaseManager.Instance != null)
-            GamePhaseManager.Instance.PhaseChanged -= HandlePhaseChanged;
+        ResourceManager.Instance.ResourceChanged -= HandleResourceChanged;
+        GamePhaseManager.PhaseChanged -= HandlePhaseChanged;
     }
 
     public void SetUnit(UnitSO _unitSO)

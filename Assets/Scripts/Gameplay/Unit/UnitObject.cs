@@ -5,76 +5,91 @@ using UnityEngine;
 public class UnitObject : MonoBehaviour
 {
     [SerializeField] private UnitSO unitSO;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    private Health health;
     private Attack attack;
 
     public UnitSO UnitData => unitSO;
 
     private void Awake()
     {
-        Health health = GetComponent<Health>() ?? gameObject.AddComponent<Health>();
-        attack = GetComponent<Attack>() ?? gameObject.AddComponent<Attack>();
-        GoldProducer goldProducer = GetComponent<GoldProducer>() ?? gameObject.AddComponent<GoldProducer>();
-        if (unitSO == null)
-        {
-            Debug.LogError($"{name} is missing its UnitSO.", this);
-            enabled = false;
-            return;
-        }
+        health = GetComponent<Health>();
+        attack = GetComponent<Attack>();
+        GoldProducer goldProducer = GetComponent<GoldProducer>();
 
         health.Initialize(unitSO.maxHealth);
-        attack.Initialize(health, unitSO.attack, new Vector2Int(unitSO.attackAreaWidth, unitSO.attackAreaHeight),
-            unitSO.maxTargets, unitSO.attacksPerSecond, unitSO.projectilePrefab, unitSO.projectileSpeed, unitSO.projectileLifetime,
-            unitSO.attackType);
+
+        attack.Initialize(
+            health,
+            unitSO.attack,
+            new Vector2Int(unitSO.attackAreaWidth, unitSO.attackAreaHeight),
+            unitSO.maxTargets,
+            unitSO.attacksPerSecond,
+            unitSO.projectilePrefab,
+            unitSO.projectileSpeed,
+            unitSO.projectileLifetime,
+            unitSO.attackType
+        );
+
         goldProducer.Initialize(unitSO.goldProduced, unitSO.goldProductionInterval);
-        SkillTreeManager.Instance?.ApplyBonusesTo(this);
+
+        spriteRenderer.sprite = unitSO.sprite;
+    }
+
+    private void OnEnable()
+    {
+        UpgradeManager.OnAcquiredNode += HandleUpgradeAcquired;
     }
 
     private void OnDisable()
     {
-        if (attack != null)
-            attack.SetRangePreviewVisible(false);
+        attack.SetRangePreviewVisible(false);
+        UpgradeManager.OnAcquiredNode -= HandleUpgradeAcquired;
     }
 
     private void OnMouseEnter()
     {
-        if (attack != null)
-            attack.SetRangePreviewVisible(true);
+        attack.SetRangePreviewVisible(true);
     }
 
     private void OnMouseExit()
     {
-        if (attack != null)
-            attack.SetRangePreviewVisible(false);
+        attack.SetRangePreviewVisible(false);
     }
 
     private void OnMouseDown()
     {
-        if (GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase)
+        if (!GamePhaseManager.Instance.IsBuildPhase)
             return;
 
-        if (PlacementSystem.Instance != null && !PlacementSystem.Instance.IsPlacementMode)
+        if (!PlacementSystem.Instance.IsPlacementMode)
             PlacementSystem.Instance.StartMovingUnit(this);
     }
 
     public void SetAttackRangeVisible(bool isVisible)
     {
-        if (attack != null)
-            attack.SetRangePreviewVisible(isVisible);
+        attack.SetRangePreviewVisible(isVisible);
     }
 
-    public void ApplySkillBonus(GeneralSkillEffect effect, float amount)
+    private void ApplySkillBonus(GeneralSkillEffect effect, float amount)
     {
         switch (effect)
         {
             case GeneralSkillEffect.Health:
-                GetComponent<Health>()?.AddHealth(Mathf.RoundToInt(amount));
+                health.AddHealth(Mathf.RoundToInt(amount));
                 break;
             case GeneralSkillEffect.Attack:
-                attack?.AddDamage(Mathf.RoundToInt(amount));
+                attack.AddDamage(Mathf.RoundToInt(amount));
                 break;
             case GeneralSkillEffect.AttackSpeed:
-                attack?.AddAttackSpeed(amount);
+                attack.AddAttackSpeed(amount);
                 break;
         }
+    }
+
+    private void HandleUpgradeAcquired(UpgradeNode node)
+    {
+        ApplySkillBonus(node.generalSkillEffect, node.effectAmount);
     }
 }

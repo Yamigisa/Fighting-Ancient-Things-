@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public enum GamePhase { Build, Combat }
+public enum GamePhase { Build, Combat, Upgrade }
 
 public class GamePhaseManager : MonoBehaviour
 {
@@ -13,12 +13,12 @@ public class GamePhaseManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI startWaveButtonText;
 
     [Header("Wave Rewards")]
-    [Min(0)] [SerializeField] private int diamondsPerClearedWave = 2;
+    [Min(0)][SerializeField] private int diamondsPerClearedWave = 2;
 
     [Header("Build-Phase Spawn Indicators")]
     [SerializeField] private Color spawnIndicatorColor = new(1f, 0.3f, 0.1f, 0.85f);
-    [Min(0.1f)] [SerializeField] private float indicatorFlashSpeed = 2f;
-    [Min(0.1f)] [SerializeField] private float indicatorTravelSpeed = 0.35f;
+    [Min(0.1f)][SerializeField] private float indicatorFlashSpeed = 2f;
+    [Min(0.1f)][SerializeField] private float indicatorTravelSpeed = 0.35f;
 
     private readonly List<SpawnRouteIndicator> spawnIndicators = new();
     private Sprite indicatorSprite;
@@ -34,9 +34,9 @@ public class GamePhaseManager : MonoBehaviour
     }
 
     public static GamePhaseManager Instance { get; private set; }
-    public GamePhase CurrentPhase { get; private set; } = GamePhase.Build;
+    public GamePhase CurrentPhase = GamePhase.Build;
     public bool IsBuildPhase => CurrentPhase == GamePhase.Build;
-    public event Action<GamePhase> PhaseChanged;
+    public static event Action<GamePhase> PhaseChanged;
 
     private void Awake()
     {
@@ -98,9 +98,8 @@ public class GamePhaseManager : MonoBehaviour
 
     public void EndCombat()
     {
-        SetPhase(GamePhase.Build);
+        SetPhase(GamePhase.Upgrade);
         RefreshStartWaveButton();
-        SkillTreeManager.Instance?.Show();
     }
 
     public void HandleWaveCleared()
@@ -114,12 +113,14 @@ public class GamePhaseManager : MonoBehaviour
         ResourceManager.Instance.CollectFromWorld(ResourceType.Diamond, diamondsPerClearedWave, rewardOrigin);
     }
 
-    private void SetPhase(GamePhase phase)
+    public void SetPhase(GamePhase phase)
     {
         CurrentPhase = phase;
         ResourceManager.Instance?.SetGoldRegenerationActive(phase == GamePhase.Combat);
         RefreshSpawnIndicators();
+        RefreshStartWaveButton();
         PhaseChanged?.Invoke(phase);
+        Debug.Log("Game Phase Changed: " + phase);
     }
 
     private void RefreshSpawnIndicators()

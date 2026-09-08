@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Attack Unit
   m_EditorClassIdentifier: 
   unitName: Attack Unit
-  sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  sprite: {fileID: 21300000, guid: bc911819ecfb5d84699bd2ac5eacbdc0, type: 3}
   prefab: {fileID: 5509300971355098516, guid: 0c6183f96bea93a4a961a949680bd526, type: 3}
   maxHealth: 50
   attack: 5
+  attackType: 0
   attackAreaWidth: 5
   attackAreaHeight: 5
   maxTargets: 1
