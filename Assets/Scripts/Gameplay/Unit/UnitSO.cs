@@ -6,7 +6,6 @@ public class UnitSO : ScriptableObject
     [Header("Identity")]
     public string unitName;
     public Sprite sprite;
-    public GameObject prefab;
 
     [Header("Defense")]
     public int maxHealth;

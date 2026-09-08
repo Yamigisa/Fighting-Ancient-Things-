@@ -5,6 +5,7 @@ public class UnitManager : MonoBehaviour
 {
     [Header("Buyable Units")]
     [SerializeField] private List<UnitSO> availableUnits = new List<UnitSO>();
+    [SerializeField] private GameObject unitPrefab;
 
     [Header("Unit Shop")]
     [SerializeField] private UnitUICard unitUICard;
@@ -21,7 +22,7 @@ public class UnitManager : MonoBehaviour
         {
             UnitUICard card = Instantiate(unitUICard, unitUIShopParent.transform);
             card.gameObject.SetActive(true);
-            card.SetUnit(unit);
+            card.SetUnit(unit, unitPrefab);
         }
     }
 }

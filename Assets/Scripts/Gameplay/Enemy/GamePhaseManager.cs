@@ -120,7 +120,6 @@ public class GamePhaseManager : MonoBehaviour
         RefreshSpawnIndicators();
         RefreshStartWaveButton();
         PhaseChanged?.Invoke(phase);
-        Debug.Log("Game Phase Changed: " + phase);
     }
 
     private void RefreshSpawnIndicators()

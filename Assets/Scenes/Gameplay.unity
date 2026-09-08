@@ -706,6 +706,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableUnits:
   - {fileID: 11400000, guid: 1b8af330b82e7c944a818dd544385c81, type: 2}
+  - {fileID: 11400000, guid: a93ddbfd171fef741b504853a4f6c1b8, type: 2}
+  - {fileID: 11400000, guid: 818c132309095d94b892d0a5f646af6d, type: 2}
+  unitPrefab: {fileID: 5509300971355098516, guid: 0c6183f96bea93a4a961a949680bd526, type: 3}
   unitUICard: {fileID: 3239154388064246977, guid: a77b8eb9b5645ba45a9a320eb5866fe4, type: 3}
   unitUIShopParent: {fileID: 240124903}
 --- !u!4 &475698482
@@ -1418,7 +1421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1120684216
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2611,6 +2614,7 @@ MonoBehaviour:
   spawnIndicatorColor: {r: 1, g: 0.3, b: 0.1, a: 0.85}
   indicatorFlashSpeed: 2
   indicatorTravelSpeed: 0.35
+  CurrentPhase: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class UnitObject : MonoBehaviour
 
     private Health health;
     private Attack attack;
+    private Collider2D selectionCollider;
 
     public UnitSO UnitData => unitSO;
 
@@ -16,6 +17,24 @@ public class UnitObject : MonoBehaviour
     {
         health = GetComponent<Health>();
         attack = GetComponent<Attack>();
+        selectionCollider = GetComponent<Collider2D>();
+        InitializeFromUnitData();
+    }
+
+    public void SetUnitData(UnitSO newUnitData)
+    {
+        if (newUnitData == null)
+            return;
+
+        unitSO = newUnitData;
+        InitializeFromUnitData();
+    }
+
+    private void InitializeFromUnitData()
+    {
+        if (unitSO == null)
+            return;
+
         GoldProducer goldProducer = GetComponent<GoldProducer>();
 
         health.Initialize(unitSO.maxHealth);
@@ -34,7 +53,8 @@ public class UnitObject : MonoBehaviour
 
         goldProducer.Initialize(unitSO.goldProduced, unitSO.goldProductionInterval);
 
-        spriteRenderer.sprite = unitSO.sprite;
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = unitSO.sprite;
     }
 
     private void OnEnable()
@@ -44,7 +64,7 @@ public class UnitObject : MonoBehaviour
 
     private void OnDisable()
     {
-        attack.SetRangePreviewVisible(false);
+        SetAttackRangeVisible(false);
         UpgradeManager.OnAcquiredNode -= HandleUpgradeAcquired;
     }
 
@@ -60,16 +80,33 @@ public class UnitObject : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!GamePhaseManager.Instance.IsBuildPhase)
+        TryStartMovingFromClick();
+    }
+
+    private void Update()
+    {
+        if (!Input.GetMouseButtonDown(0) || Camera.main == null || selectionCollider == null)
             return;
 
-        if (!PlacementSystem.Instance.IsPlacementMode)
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (selectionCollider.OverlapPoint(mouseWorldPosition))
+            TryStartMovingFromClick();
+    }
+
+    private void TryStartMovingFromClick()
+    {
+        if (GamePhaseManager.Instance == null || !GamePhaseManager.Instance.IsBuildPhase)
+            return;
+
+        if (PlacementSystem.Instance != null && !PlacementSystem.Instance.IsPlacementMode)
             PlacementSystem.Instance.StartMovingUnit(this);
     }
 
     public void SetAttackRangeVisible(bool isVisible)
     {
-        attack.SetRangePreviewVisible(isVisible);
+        attack ??= GetComponent<Attack>();
+        if (attack != null)
+            attack.SetRangePreviewVisible(isVisible);
     }
 
     private void ApplySkillBonus(GeneralSkillEffect effect, float amount)

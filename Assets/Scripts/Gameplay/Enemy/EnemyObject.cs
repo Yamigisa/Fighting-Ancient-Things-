@@ -48,6 +48,13 @@ public class EnemyObject : MonoBehaviour
         if (!hasCustomPath && EnemyDestination.Instance != null)
             movement.SetDestination(EnemyDestination.Instance.transform);
 
+        if (HasReachedDestinationTile())
+        {
+            EnemyDestination.Instance.ReceiveEnemy(destinationDamage);
+            Destroy(gameObject);
+            return;
+        }
+
         if (blockingUnit != null && !blockingUnit.IsDead)
             return;
 
@@ -84,14 +91,15 @@ public class EnemyObject : MonoBehaviour
         movement.SetBlocked(true);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private bool HasReachedDestinationTile()
     {
-        EnemyDestination destination = other.GetComponentInParent<EnemyDestination>();
-        if (destination == null)
-            return;
+        if (EnemyDestination.Instance == null || GridManager.Instance == null)
+            return false;
 
-        destination.ReceiveEnemy(destinationDamage);
-        Destroy(gameObject);
+        Tile enemyTile = GridManager.Instance.GetTileAtWorldPosition(transform.position);
+        Tile destinationTile = GridManager.Instance.GetTileAtWorldPosition(EnemyDestination.Instance.transform.position);
+
+        return enemyTile != null && enemyTile == destinationTile;
     }
 
     private void OnDestroy()

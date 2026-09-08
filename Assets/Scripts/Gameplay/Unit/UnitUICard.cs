@@ -10,6 +10,7 @@ public class UnitUICard : MonoBehaviour
     [Header("Affordability Visuals")][Range(0f, 1f)][SerializeField] private float unaffordableAlpha = 0.5f;
     private CanvasGroup cardCanvasGroup;
     private UnitSO unitSO;
+    private GameObject unitPrefab;
 
     private void Awake()
     {
@@ -37,9 +38,16 @@ public class UnitUICard : MonoBehaviour
         GamePhaseManager.PhaseChanged -= HandlePhaseChanged;
     }
 
-    public void SetUnit(UnitSO _unitSO)
+    public void SetUnit(UnitSO unit, GameObject prefab)
     {
-        unitSO = _unitSO;
+        if (unit == null || prefab == null || !prefab.TryGetComponent<UnitObject>(out _))
+        {
+            Debug.LogError("The shop needs a unit prefab with a UnitObject and assigned Unit Data.", prefab);
+            return;
+        }
+
+        unitPrefab = prefab;
+        unitSO = unit;
         image.sprite = unitSO.sprite;
         unitCostText.text = unitSO.cost.ToString();
         RefreshBuyButton();
@@ -67,7 +75,7 @@ public class UnitUICard : MonoBehaviour
     public void SelectUnit()
     {
         if ((GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase) ||
-            unitSO == null || ResourceManager.Instance == null ||
+            unitSO == null || unitPrefab == null || ResourceManager.Instance == null ||
             ResourceManager.Instance.GetAmount(ResourceType.Gold) < unitSO.cost)
             return;
 
@@ -77,6 +85,6 @@ public class UnitUICard : MonoBehaviour
             return;
         }
 
-        PlacementSystem.Instance.StartPlacement(unitSO);
+        PlacementSystem.Instance.StartPlacement(unitSO, unitPrefab);
     }
 }

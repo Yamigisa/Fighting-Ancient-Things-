@@ -14,11 +14,13 @@ public class PlacementSystem : MonoBehaviour
     [Range(0f, 1f)][SerializeField] private float previewAlpha = 0.5f;
 
     private UnitSO selectedUnit;
+    private GameObject selectedUnitPrefab;
     private GameObject ghostUnit;
     private UnitObject ghostUnitObject;
     private UnitObject movingUnit;
     private Tile movingUnitOriginTile;
     private Tile hoveredTile;
+    private bool waitingForMoveSelectionClickRelease;
     private readonly Dictionary<SpriteRenderer, Color> ghostSpriteColors = new();
     private TextMeshProUGUI moveControlsText;
 
@@ -34,9 +36,24 @@ public class PlacementSystem : MonoBehaviour
     private void Update()
     {
         if (ghostUnit == null)
+        {
+            if (Input.GetMouseButtonDown(0))
+                TryStartMovingClickedUnit();
+
             return;
+        }
 
         UpdateGhostPosition();
+
+        // The click that selected a placed unit must not also place its ghost
+        // back onto the same tile in the same frame.
+        if (waitingForMoveSelectionClickRelease)
+        {
+            if (!Input.GetMouseButton(0))
+                waitingForMoveSelectionClickRelease = false;
+
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -46,11 +63,7 @@ public class PlacementSystem : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            if (IsMovingUnit)
-                RotateMovingGhost();
-            else
-                CancelPlacement();
-
+            RotateGhost();
             return;
         }
 
@@ -58,21 +71,30 @@ public class PlacementSystem : MonoBehaviour
             TryPlaceSelectedUnit();
     }
 
-    public void StartPlacement(UnitSO unit)
+    public void StartPlacement(UnitSO unit, GameObject unitPrefab)
     {
         if (GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase)
             return;
 
+        if (unit == null || unitPrefab == null || !unitPrefab.TryGetComponent<UnitObject>(out _))
+        {
+            Debug.LogError("Placement needs a UnitSO and a unit prefab that contains UnitObject.", unitPrefab);
+            return;
+        }
+
         CancelPlacement();
 
         selectedUnit = unit;
-        ghostUnit = Instantiate(selectedUnit.prefab);
+        selectedUnitPrefab = unitPrefab;
+        ghostUnit = Instantiate(selectedUnitPrefab);
+        ghostUnit.GetComponent<UnitObject>()?.SetUnitData(selectedUnit);
         ConfigureGhost(ghostUnit);
         ghostUnitObject = ghostUnit.GetComponent<UnitObject>();
         if (ghostUnitObject != null)
             ghostUnitObject.SetAttackRangeVisible(true);
 
         gridManager.SetPlacementPreview(true);
+        SetMoveControlsVisible(true);
     }
 
     public void StartMovingUnit(UnitObject unit)
@@ -93,16 +115,20 @@ public class PlacementSystem : MonoBehaviour
         }
 
         selectedUnit = unit.UnitData;
+        selectedUnitPrefab = unit.gameObject;
         movingUnitOriginTile.SetOccupied(false);
-        unit.gameObject.SetActive(false);
 
-        ghostUnit = Instantiate(selectedUnit.prefab, unit.transform.position, unit.transform.rotation);
+        // Clone while the source is active. Cloning it after SetActive(false)
+        // creates an inactive preview whose Awake has not initialized its components.
+        ghostUnit = Instantiate(selectedUnitPrefab, unit.transform.position, unit.transform.rotation);
+        unit.gameObject.SetActive(false);
         ConfigureGhost(ghostUnit);
         ghostUnitObject = ghostUnit.GetComponent<UnitObject>();
         if (ghostUnitObject != null)
             ghostUnitObject.SetAttackRangeVisible(true);
 
         gridManager.SetPlacementPreview(true);
+        waitingForMoveSelectionClickRelease = true;
         SetMoveControlsVisible(true);
     }
 
@@ -130,7 +156,9 @@ public class PlacementSystem : MonoBehaviour
         movingUnit = null;
         movingUnitOriginTile = null;
         selectedUnit = null;
+        selectedUnitPrefab = null;
         hoveredTile = null;
+        waitingForMoveSelectionClickRelease = false;
         SetMoveControlsVisible(false);
     }
 
@@ -167,7 +195,7 @@ public class PlacementSystem : MonoBehaviour
         if (GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase)
             return;
 
-        if (hoveredTile == null || hoveredTile.IsOccupied || selectedUnit == null)
+        if (hoveredTile == null || hoveredTile.IsOccupied || selectedUnit == null || selectedUnitPrefab == null)
             return;
 
         if (IsMovingUnit)
@@ -182,7 +210,8 @@ public class PlacementSystem : MonoBehaviour
             return;
         }
 
-        Instantiate(selectedUnit.prefab, hoveredTile.transform.position, Quaternion.identity, placedUnitsParent);
+        GameObject placedUnit = Instantiate(selectedUnitPrefab, hoveredTile.transform.position, Quaternion.identity, placedUnitsParent);
+        placedUnit.GetComponent<UnitObject>()?.SetUnitData(selectedUnit);
         hoveredTile.SetOccupied(true);
         CancelPlacement();
     }
@@ -202,12 +231,45 @@ public class PlacementSystem : MonoBehaviour
         movingUnit = null;
         movingUnitOriginTile = null;
         selectedUnit = null;
+        selectedUnitPrefab = null;
         hoveredTile = null;
+        waitingForMoveSelectionClickRelease = false;
         gridManager.SetPlacementPreview(false);
         SetMoveControlsVisible(false);
     }
 
-    private void RotateMovingGhost()
+    private void TryStartMovingClickedUnit()
+    {
+        if ((GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase) ||
+            sceneCamera == null)
+        {
+            return;
+        }
+
+        Vector3 mouseWorldPosition = sceneCamera.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPosition.z = 0f;
+        Tile clickedTile = gridManager != null
+            ? gridManager.GetTileAtWorldPosition(mouseWorldPosition)
+            : null;
+
+        if (clickedTile == null)
+            return;
+
+        foreach (UnitObject unit in FindObjectsByType<UnitObject>(FindObjectsSortMode.None))
+        {
+            if (unit == null || !unit.isActiveAndEnabled)
+                continue;
+
+            Tile unitTile = gridManager.GetTileAtWorldPosition(unit.transform.position);
+            if (unitTile == clickedTile)
+            {
+                StartMovingUnit(unit);
+                return;
+            }
+        }
+    }
+
+    private void RotateGhost()
     {
         if (ghostUnit != null)
             ghostUnit.transform.Rotate(0f, 0f, -90f);
