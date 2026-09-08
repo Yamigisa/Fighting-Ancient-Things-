@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeName: Attack Speed
   description: Increase +2 attack speed for all units
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bc911819ecfb5d84699bd2ac5eacbdc0, type: 3}
   nodeId: 3
   generalSkillEffect: 2
-  effectAmount: 1
+  effectAmount: 2
   diamondCost: 1
   requiredNodes: []

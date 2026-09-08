@@ -10,9 +10,11 @@ public class GridManager : MonoBehaviour
     [Header("Tile Settings")]
     [SerializeField] private Tile tilePrefab;
 
+    [Header("Attack Range Preview")]
+    [SerializeField] private Color attackRangeColor = new(0.3f, 0.65f, 1f, 1f);
+
     [Header("Enemy Destination")]
     [SerializeField] private EnemyDestination enemyDestinationPrefab;
-    [Min(1)] [SerializeField] private int enemyDestinationMaxHealth = 20;
 
     private Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
     private readonly List<Tile> attackRangePreviewTiles = new();
@@ -20,18 +22,13 @@ public class GridManager : MonoBehaviour
     private bool isPlacementPreviewActive;
     private Vector2Int attackRangePreviewSourceCell;
     private Vector2Int attackRangePreviewSize;
+    private Vector2Int attackRangePreviewDirection;
 
     public static GridManager Instance { get; private set; }
 
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-            Instance = null;
     }
 
     private void Start()
@@ -91,12 +88,6 @@ public class GridManager : MonoBehaviour
 
     private void SpawnEnemyDestination()
     {
-        if (enemyDestinationPrefab == null)
-        {
-            Debug.LogError("GridManager is missing an Enemy Destination prefab.", this);
-            return;
-        }
-
         Vector2Int centerCell = new(width / 2, height / 2);
         Tile centerTile = GetTilePosition(centerCell);
         if (centerTile == null)
@@ -108,7 +99,7 @@ public class GridManager : MonoBehaviour
             Quaternion.identity,
             transform);
         destinationComponent.name = "Enemy Destination";
-        destinationComponent.Initialize(enemyDestinationMaxHealth);
+        GameManager.Instance.InitializeEnemyDestinationHealth(destinationComponent.HealthText);
         centerTile.SetOccupied(true);
     }
 
@@ -134,11 +125,11 @@ public class GridManager : MonoBehaviour
             previewTile.SetPlacementPreview(true);
     }
 
-    public void SetAttackRangePreview(Vector2Int sourceCell, Vector2Int areaSize)
+    public void SetAttackRangePreview(Vector2Int sourceCell, Vector2Int areaSize, Vector2Int forwardDirection)
     {
         areaSize = new Vector2Int(Mathf.Max(1, areaSize.x), Mathf.Max(1, areaSize.y));
         if (attackRangePreviewTiles.Count > 0 && sourceCell == attackRangePreviewSourceCell &&
-            areaSize == attackRangePreviewSize)
+            areaSize == attackRangePreviewSize && forwardDirection == attackRangePreviewDirection)
         {
             return;
         }
@@ -146,19 +137,21 @@ public class GridManager : MonoBehaviour
         ClearAttackRangePreview();
         attackRangePreviewSourceCell = sourceCell;
         attackRangePreviewSize = areaSize;
+        attackRangePreviewDirection = forwardDirection;
 
-        int minimumX = sourceCell.x - areaSize.x / 2;
-        int minimumY = sourceCell.y - areaSize.y / 2;
+        Vector2Int sidewaysDirection = new(-forwardDirection.y, forwardDirection.x);
+        int minimumWidth = -(areaSize.x / 2);
 
-        for (int x = minimumX; x < minimumX + areaSize.x; x++)
+        for (int depth = 1; depth <= areaSize.y; depth++)
         {
-            for (int y = minimumY; y < minimumY + areaSize.y; y++)
+            for (int width = minimumWidth; width < minimumWidth + areaSize.x; width++)
             {
-                Tile tile = GetTilePosition(new Vector2(x, y));
+                Vector2Int cell = sourceCell + forwardDirection * depth + sidewaysDirection * width;
+                Tile tile = GetTilePosition(cell);
                 if (tile == null)
                     continue;
 
-                tile.SetAttackRangePreview(true);
+                tile.SetAttackRangePreview(true, attackRangeColor);
                 attackRangePreviewTiles.Add(tile);
             }
         }
@@ -169,7 +162,7 @@ public class GridManager : MonoBehaviour
         foreach (Tile tile in attackRangePreviewTiles)
         {
             if (tile != null)
-                tile.SetAttackRangePreview(false);
+                tile.SetAttackRangePreview(false, attackRangeColor);
         }
 
         attackRangePreviewTiles.Clear();

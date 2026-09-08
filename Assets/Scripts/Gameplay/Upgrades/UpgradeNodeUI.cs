@@ -18,33 +18,27 @@ public class UpgradeNodeUI : MonoBehaviour
 
     private void Awake()
     {
-        if (acquireButton == null)
-            acquireButton = GetComponent<Button>();
+        acquireButton = GetComponent<Button>();
     }
 
     private void OnEnable()
     {
-        if (ResourceManager.Instance != null)
-            ResourceManager.Instance.ResourceChanged += HandleResourceChanged;
+        ResourceManager.Instance.ResourceChanged += HandleResourceChanged;
     }
 
     private void OnDisable()
     {
-        if (ResourceManager.Instance != null)
-            ResourceManager.Instance.ResourceChanged -= HandleResourceChanged;
+        ResourceManager.Instance.ResourceChanged -= HandleResourceChanged;
     }
 
     public void Initialize(UpgradeNode node)
     {
-        if (node == null)
-            return;
-
         upgradeNode = node;
 
         nodeName.text = node.nodeName;
         description.text = node.description;
         nodeIcon.sprite = node.icon;
-        diamondCostText.text = $"Cost: {node.diamondCost} Diamonds";
+        diamondCostText.text = "" + node.diamondCost;
 
         acquireButton.onClick.RemoveListener(BuyUpgrade);
         acquireButton.onClick.AddListener(BuyUpgrade);

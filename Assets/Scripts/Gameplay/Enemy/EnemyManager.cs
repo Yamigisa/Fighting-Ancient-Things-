@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private EnemyObject enemyObjectPrefab;
 
     [Header("Enemy wave")]
-    [SerializeField] private List<EnemyInWave> enemyWaves = new();
+    public List<EnemyInWave> enemyWaves = new();
 
     private Coroutine waveCoroutine;
     private readonly HashSet<EnemyObject> activeEnemies = new();
@@ -19,6 +19,13 @@ public class EnemyManager : MonoBehaviour
     public EnemyInWave CurrentWave => enemyWaves[currentWaveIndex];
 
     public bool HasRemainingWaves => currentWaveIndex < enemyWaves.Count;
+
+    public static EnemyManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void OnEnable()
     {

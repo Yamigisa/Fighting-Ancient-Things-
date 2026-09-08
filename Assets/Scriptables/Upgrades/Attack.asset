@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeName: Attack
   description: Increase +2 attack for all units
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ca81f46bbfae2dd4aaf50b8e3ebf7726, type: 3}
   nodeId: 2
   generalSkillEffect: 1
-  effectAmount: 1
+  effectAmount: 2
   diamondCost: 1
   requiredNodes: []

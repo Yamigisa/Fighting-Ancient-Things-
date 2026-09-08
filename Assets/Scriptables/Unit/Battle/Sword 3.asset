@@ -10,21 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ed809740180443247b3dfa680529ee37, type: 3}
-  m_Name: Attack Unit
+  m_Name: Sword 3
   m_EditorClassIdentifier: 
-  unitName: Attack Unit
-  sprite: {fileID: 21300000, guid: bc911819ecfb5d84699bd2ac5eacbdc0, type: 3}
-  prefab: {fileID: 5509300971355098516, guid: 0c6183f96bea93a4a961a949680bd526, type: 3}
-  maxHealth: 50
-  attack: 5
-  attackType: 0
-  attackAreaWidth: 5
-  attackAreaHeight: 5
-  maxTargets: 1
-  attacksPerSecond: 5
+  unitName: Sword 3
+  sprite: {fileID: 21300000, guid: 3d0aa61fd5cf47148ab496bbf6c9f3b8, type: 3}
+  maxHealth: 12
+  attack: 6
+  attackType: 1
+  attackAreaWidth: 3
+  attackAreaHeight: 3
+  maxTargets: 10
+  attacksPerSecond: 3
   projectilePrefab: {fileID: 0}
   projectileSpeed: 4
   projectileLifetime: 3
   goldProduced: 0
   goldProductionInterval: 0
-  cost: 1
+  cost: 36

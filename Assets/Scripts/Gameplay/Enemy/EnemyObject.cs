@@ -43,6 +43,9 @@ public class EnemyObject : MonoBehaviour
         destinationDamage = Mathf.Max(1, enemySO.destinationDamage);
         goldReward = Mathf.Max(0, enemySO.goldReward);
         diamondReward = Mathf.Max(0, enemySO.diamondReward);
+
+        spriteRenderer.sprite = enemySO.sprite;
+        IgnoreEnemyCollisions();
     }
 
     private void Update()
@@ -52,7 +55,7 @@ public class EnemyObject : MonoBehaviour
 
         if (HasReachedDestinationTile())
         {
-            EnemyDestination.Instance.ReceiveEnemy(destinationDamage);
+            GameManager.Instance.ReceiveEnemyDestinationDamage(destinationDamage);
             Destroy(gameObject);
             return;
         }
@@ -91,6 +94,26 @@ public class EnemyObject : MonoBehaviour
         movement.SetBlocked(true);
     }
 
+    private void IgnoreEnemyCollisions()
+    {
+        Collider2D[] ownColliders = GetComponentsInChildren<Collider2D>();
+        EnemyObject[] enemies = FindObjectsByType<EnemyObject>(FindObjectsSortMode.None);
+
+        foreach (EnemyObject enemy in enemies)
+        {
+            if (enemy == this)
+                continue;
+
+            Collider2D[] enemyColliders = enemy.GetComponentsInChildren<Collider2D>();
+
+            foreach (Collider2D ownCollider in ownColliders)
+            {
+                foreach (Collider2D enemyCollider in enemyColliders)
+                    Physics2D.IgnoreCollision(ownCollider, enemyCollider);
+            }
+        }
+    }
+
     private bool HasReachedDestinationTile()
     {
         if (EnemyDestination.Instance == null || GridManager.Instance == null)
@@ -117,9 +140,9 @@ public class EnemyObject : MonoBehaviour
         if (ResourceManager.Instance == null)
             return;
 
-        // if (goldReward > 0)
-        //     ResourceManager.Instance.CollectFromWorld(ResourceType.Gold, goldReward, transform.position);
-        // if (diamondReward > 0)
-        //     ResourceManager.Instance.CollectFromWorld(ResourceType.Diamond, diamondReward, transform.position);
+        if (goldReward > 0)
+            ResourceManager.Instance.Add(ResourceType.Gold, goldReward);
+        if (diamondReward > 0)
+            ResourceManager.Instance.Add(ResourceType.Diamond, diamondReward);
     }
 }

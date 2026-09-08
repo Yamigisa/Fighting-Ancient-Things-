@@ -48,7 +48,10 @@ public class Attack : MonoBehaviour
             return;
         }
 
-        GridManager.Instance.SetAttackRangePreview(WorldToGridCell(transform.position), areaSize);
+        GridManager.Instance.SetAttackRangePreview(
+            WorldToGridCell(transform.position),
+            areaSize,
+            GetAttackDirection());
     }
 
     public void SetPriorityTarget(Health target)
@@ -90,7 +93,8 @@ public class Attack : MonoBehaviour
 
     private List<Health> FindTargetsInRange()
     {
-        if (priorityTarget != null && !priorityTarget.IsDead && IsValidTarget(priorityTarget))
+        if (priorityTarget != null && !priorityTarget.IsDead && IsValidTarget(priorityTarget) &&
+            IsTargetInGridRange(priorityTarget.transform.position))
             return new List<Health> { priorityTarget };
 
         List<Health> targets = new();
@@ -115,10 +119,12 @@ public class Attack : MonoBehaviour
 
     private List<Health> FindContactTargets()
     {
-        if (priorityTarget != null && !priorityTarget.IsDead && IsValidTarget(priorityTarget))
+        if (priorityTarget != null && !priorityTarget.IsDead && IsValidTarget(priorityTarget) &&
+            IsTargetInGridRange(priorityTarget.transform.position))
             return new List<Health> { priorityTarget };
 
-        contactTargets.RemoveAll(target => target == null || target.IsDead || !IsValidTarget(target));
+        contactTargets.RemoveAll(target => target == null || target.IsDead || !IsValidTarget(target) ||
+            !IsTargetInGridRange(target.transform.position));
         List<Health> targets = new(contactTargets);
         targets.Sort((first, second) =>
             ((Vector2)(first.transform.position - transform.position)).sqrMagnitude.CompareTo(
@@ -183,8 +189,16 @@ public class Attack : MonoBehaviour
     {
         Vector2Int sourceCell = WorldToGridCell(transform.position);
         Vector2Int targetCell = WorldToGridCell(targetPosition);
-        return IsOffsetInArea(targetCell.x - sourceCell.x, areaSize.x) &&
-            IsOffsetInArea(targetCell.y - sourceCell.y, areaSize.y);
+        Vector2Int offset = targetCell - sourceCell;
+        Vector2Int forwardDirection = GetAttackDirection();
+        Vector2Int sidewaysDirection = new(-forwardDirection.y, forwardDirection.x);
+
+        int forwardDistance = offset.x * forwardDirection.x + offset.y * forwardDirection.y;
+        int sidewaysDistance = offset.x * sidewaysDirection.x + offset.y * sidewaysDirection.y;
+        int minimumWidth = -(areaSize.x / 2);
+
+        return forwardDistance >= 1 && forwardDistance <= areaSize.y &&
+            sidewaysDistance >= minimumWidth && sidewaysDistance < minimumWidth + areaSize.x;
     }
 
     private bool IsValidTarget(Health target)
@@ -194,10 +208,14 @@ public class Attack : MonoBehaviour
             : target.GetComponent<EnemyObject>() != null;
     }
 
-    private static bool IsOffsetInArea(int offset, int size)
+    private Vector2Int GetAttackDirection()
     {
-        int minimumOffset = -(size / 2);
-        return offset >= minimumOffset && offset <= minimumOffset + size - 1;
+        Vector2 direction = transform.up;
+
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+            return new Vector2Int(direction.x > 0f ? 1 : -1, 0);
+
+        return new Vector2Int(0, direction.y > 0f ? 1 : -1);
     }
 
     private static Vector2Int WorldToGridCell(Vector3 worldPosition) =>

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +8,7 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private Camera sceneCamera;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Transform placedUnitsParent;
+    [SerializeField] private GameObject moveControlsUi;
 
     [Header("Unit Ghost Preview")]
     [Range(0f, 1f)][SerializeField] private float previewAlpha = 0.5f;
@@ -22,7 +22,6 @@ public class PlacementSystem : MonoBehaviour
     private Tile hoveredTile;
     private bool waitingForMoveSelectionClickRelease;
     private readonly Dictionary<SpriteRenderer, Color> ghostSpriteColors = new();
-    private TextMeshProUGUI moveControlsText;
 
     public static PlacementSystem Instance { get; private set; }
     public bool IsPlacementMode => ghostUnit != null;
@@ -204,7 +203,8 @@ public class PlacementSystem : MonoBehaviour
             return;
         }
 
-        GameObject placedUnit = Instantiate(selectedUnitPrefab, hoveredTile.transform.position, Quaternion.identity, placedUnitsParent);
+        GameObject placedUnit = Instantiate(selectedUnitPrefab, hoveredTile.transform.position,
+            ghostUnit.transform.rotation, placedUnitsParent);
         placedUnit.GetComponent<UnitObject>()?.SetUnitData(selectedUnit);
         hoveredTile.SetOccupied(true);
         CancelPlacement();
@@ -307,34 +307,6 @@ public class PlacementSystem : MonoBehaviour
 
     private void SetMoveControlsVisible(bool isVisible)
     {
-        if (moveControlsText == null && isVisible)
-            CreateMoveControls();
-
-        if (moveControlsText != null)
-            moveControlsText.transform.parent.gameObject.SetActive(isVisible);
-    }
-
-    private void CreateMoveControls()
-    {
-        GameObject canvasObject = new("Move Controls", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        Canvas canvas = canvasObject.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 50;
-
-        GameObject textObject = new("Move Instructions", typeof(RectTransform), typeof(TextMeshProUGUI));
-        textObject.transform.SetParent(canvasObject.transform, false);
-        RectTransform textTransform = textObject.GetComponent<RectTransform>();
-        textTransform.anchorMin = new Vector2(0.5f, 0f);
-        textTransform.anchorMax = new Vector2(0.5f, 0f);
-        textTransform.pivot = new Vector2(0.5f, 0f);
-        textTransform.anchoredPosition = new Vector2(0f, 28f);
-        textTransform.sizeDelta = new Vector2(500f, 50f);
-
-        moveControlsText = textObject.GetComponent<TextMeshProUGUI>();
-        moveControlsText.font = TMP_Settings.defaultFontAsset;
-        moveControlsText.fontSize = 24f;
-        moveControlsText.alignment = TextAlignmentOptions.Center;
-        moveControlsText.color = Color.white;
-        moveControlsText.text = "LMB: Place    RMB: Rotate    Esc: Cancel";
+        moveControlsUi.SetActive(isVisible);
     }
 }

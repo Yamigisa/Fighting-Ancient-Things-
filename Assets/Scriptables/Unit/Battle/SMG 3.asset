@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ed809740180443247b3dfa680529ee37, type: 3}
-  m_Name: Defend
+  m_Name: SMG 3
   m_EditorClassIdentifier: 
-  unitName: Defend
-  sprite: {fileID: 21300000, guid: 3792e963044dd0b4dbc5da2f6208c8da, type: 3}
-  maxHealth: 5
-  attack: 0
+  unitName: SMG 3
+  sprite: {fileID: 21300000, guid: cb4f4a22613306f4a94bc69b02fcce40, type: 3}
+  maxHealth: 10
+  attack: 4
   attackType: 0
-  attackAreaWidth: 1
-  attackAreaHeight: 1
+  attackAreaWidth: 3
+  attackAreaHeight: 5
   maxTargets: 1
-  attacksPerSecond: 0
+  attacksPerSecond: 4
   projectilePrefab: {fileID: 0}
-  projectileSpeed: 0.01
-  projectileLifetime: 0.1
+  projectileSpeed: 4
+  projectileLifetime: 3
   goldProduced: 0
   goldProductionInterval: 0
-  cost: 1
+  cost: 25

@@ -6,7 +6,6 @@ public class EnemySO : ScriptableObject
     [Header("Identity")]
     public string unitName;
     public Sprite sprite;
-    public GameObject prefab;
 
     [Header("Defense")]
     public int maxHealth;
@@ -20,9 +19,11 @@ public class EnemySO : ScriptableObject
     public int destinationDamage = 1;
 
     [Header("Rewards")]
-    [Min(0)] [Tooltip("Gold awarded when this enemy is removed.")]
+    [Min(0)]
+    [Tooltip("Gold awarded when this enemy is removed.")]
     public int goldReward = 1;
-    [Min(0)] [Tooltip("Diamonds awarded when this enemy is removed.")]
+    [Min(0)]
+    [Tooltip("Diamonds awarded when this enemy is removed.")]
     public int diamondReward;
 
     [Header("Attack")]

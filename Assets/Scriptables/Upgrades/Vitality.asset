@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeName: Vitality
   description: Increase +2 health for all units
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3792e963044dd0b4dbc5da2f6208c8da, type: 3}
   nodeId: 1
   generalSkillEffect: 0
-  effectAmount: 1
+  effectAmount: 2
   diamondCost: 1
   requiredNodes: []
