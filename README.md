@@ -19,7 +19,7 @@ After each wave is cleared, you enter an **Upgrade Phase** — a card-draw syste
 ## How to Run
 
 ### Option A — Play the Build (Recommended)
-1. Download `FightingAncientThings.zip` from .
+1. Download `FightingAncientThings.zip` from https://drive.google.com/drive/u/0/folders/1-HHJ7DeTv6cn8W4fBLSBMzkLP3owaZyF.
 2. Extract the archive anywhere on your PC.
 3. Run `FightingAncientThings.exe`.
 4. No installation required. Windows only.
