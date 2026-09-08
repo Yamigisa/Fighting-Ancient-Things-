@@ -14,8 +14,6 @@ After each wave is cleared, you enter an **Upgrade Phase** — a card-draw syste
 **Win condition:** Survive all predefined enemy waves.  
 **Lose condition:** The core's health reaches zero.
 
-Once all scripted waves are defeated, the game enters **Endless Mode** — waves keep coming with no end, for as long as you can hold.
-
 ---
 
 ## How to Run
