@@ -15,15 +15,15 @@ MonoBehaviour:
   unitName: SMG 3
   sprite: {fileID: 21300000, guid: cb4f4a22613306f4a94bc69b02fcce40, type: 3}
   maxHealth: 10
-  attack: 4
+  attack: 6
   attackType: 0
   attackAreaWidth: 3
   attackAreaHeight: 5
   maxTargets: 1
-  attacksPerSecond: 4
+  attacksPerSecond: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 4
   projectileLifetime: 3
   goldProduced: 0
   goldProductionInterval: 0
-  cost: 25
+  cost: 40

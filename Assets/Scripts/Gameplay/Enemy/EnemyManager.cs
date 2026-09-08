@@ -70,6 +70,7 @@ public class EnemyManager : MonoBehaviour
         if (currentWaveIndex == enemyWaves.Count)
         {
             GameManager.Instance.SetPhase(GamePhase.Build);
+            GameManager.Instance.gameOverText.text = "You have cleared all waves!";
             GameManager.Instance.GameOver();
         }
         GameManager.Instance.EndCombat();

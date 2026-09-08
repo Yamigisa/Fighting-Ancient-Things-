@@ -231,6 +231,7 @@ MonoBehaviour:
   enemyDestinationMaxHealth: 20
   gameOverPanel: {fileID: 43293235}
   retryButton: {fileID: 484795231}
+  gameOverText: {fileID: 325836500}
 --- !u!4 &73705594
 Transform:
   m_ObjectHideFlags: 0
@@ -582,7 +583,7 @@ GameObject:
   - component: {fileID: 325836501}
   - component: {fileID: 325836500}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Game Over Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3024,8 +3025,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradableNodes:
   - {fileID: 11400000, guid: ad3ecda079947644aa7f61d9264044e9, type: 2}
+  - {fileID: 11400000, guid: be2b387245f579c42a1482c98af43a9b, type: 2}
+  - {fileID: 11400000, guid: 63c7a5f074564544baedd4505ce4d155, type: 2}
   - {fileID: 11400000, guid: 6d507cf360a39ea4db164ce80ddf81d0, type: 2}
+  - {fileID: 11400000, guid: aa1ef255dd886204a9071b5153f05745, type: 2}
+  - {fileID: 11400000, guid: fb7bc875d688476469a57c303c3211d0, type: 2}
   - {fileID: 11400000, guid: e8b1d222edf045449856c573b8aefba7, type: 2}
+  - {fileID: 11400000, guid: 6c65a4bfaed98934581349da76da5f87, type: 2}
+  - {fileID: 11400000, guid: 4c468a4f52b560343acdb83ebca207a6, type: 2}
   upgradeNodeUI: {fileID: 2376694329068830192, guid: 0d5d559ae3c2cad4fb4d6f4aad8c0ed2, type: 3}
   upgradePanel: {fileID: 1120684215}
   maximumNodesOffered: 3

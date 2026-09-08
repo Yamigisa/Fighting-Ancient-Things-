@@ -20,7 +20,7 @@ MonoBehaviour:
   attackAreaWidth: 1
   attackAreaHeight: 3
   maxTargets: 1
-  attacksPerSecond: 2
+  attacksPerSecond: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 4
   projectileLifetime: 3

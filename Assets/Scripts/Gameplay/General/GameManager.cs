@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [Header("Game Over")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private Button retryButton;
+    public TextMeshProUGUI gameOverText;
 
     private GamePhase currentPhase = GamePhase.Build;
     private TextMeshProUGUI enemyDestinationHealthText;
