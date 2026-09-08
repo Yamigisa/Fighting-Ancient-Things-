@@ -67,6 +67,11 @@ public class EnemyManager : MonoBehaviour
         currentWaveIndex++;
         waveCoroutine = null;
 
+        if (currentWaveIndex == enemyWaves.Count)
+        {
+            GameManager.Instance.SetPhase(GamePhase.Build);
+            GameManager.Instance.GameOver();
+        }
         GameManager.Instance.EndCombat();
     }
 

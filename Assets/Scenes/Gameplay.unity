@@ -517,104 +517,6 @@ MonoBehaviour:
   m_Spacing: {x: 25, y: 25}
   m_Constraint: 2
   m_ConstraintCount: 6
---- !u!1 &283140338
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 283140340}
-  - component: {fileID: 283140339}
-  - component: {fileID: 283140341}
-  m_Layer: 0
-  m_Name: Enemy Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &283140339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283140338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56def0d677148cc4687093688bedeb99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyObjectPrefab: {fileID: 8438325984699014015, guid: ac8d458e4884a774a835b7405f434d95, type: 3}
-  enemyWaves:
-  - enemyList:
-    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
-    count: 3
-    spawnInterval: 5
-    spawnEdge: 1
-    laneIndex: 1
-  - enemyList:
-    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
-    - {fileID: 11400000, guid: 65a58f2dcf61d0b43a43e88592cc8c6e, type: 2}
-    count: 8
-    spawnInterval: 5
-    spawnEdge: 0
-    laneIndex: 3
-  - enemyList:
-    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
-    - {fileID: 11400000, guid: 65a58f2dcf61d0b43a43e88592cc8c6e, type: 2}
-    - {fileID: 11400000, guid: 3f8ccf09c890b584fa9e5ed43da430ac, type: 2}
-    count: 10
-    spawnInterval: 4
-    spawnEdge: 2
-    laneIndex: 7
-  - enemyList:
-    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
-    - {fileID: 11400000, guid: 65a58f2dcf61d0b43a43e88592cc8c6e, type: 2}
-    - {fileID: 11400000, guid: 3f8ccf09c890b584fa9e5ed43da430ac, type: 2}
-    - {fileID: 11400000, guid: 92a30100090ae2043b7ac2f5cfb1da05, type: 2}
-    count: 12
-    spawnInterval: 3
-    spawnEdge: 3
-    laneIndex: 2
---- !u!4 &283140340
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283140338}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &283140341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283140338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f6c00ccf2604dd090db1bb4fb0bc6bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyManager: {fileID: 283140339}
-  gridManager: {fileID: 1761114909}
-  spawnIndicatorColor: {r: 1, g: 0.3, b: 0.1, a: 0.85}
-  indicatorFlashSpeed: 2
-  indicatorTravelSpeed: 0.35
-  lineWidth: 0.06
-  pulseScale: 0.35
-  lineSortingOrderOffset: 9
-  pulseSortingOrderOffset: 10
 --- !u!1 &321140725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,7 +1018,7 @@ GameObject:
   - component: {fileID: 484795232}
   - component: {fileID: 484795231}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Retry Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1822,6 +1724,104 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 627433706}
   m_CullTransparentMesh: 1
+--- !u!1 &818457051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 818457054}
+  - component: {fileID: 818457053}
+  - component: {fileID: 818457052}
+  m_Layer: 0
+  m_Name: 'Enemy Manager '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &818457052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818457051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6c00ccf2604dd090db1bb4fb0bc6bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyManager: {fileID: 818457053}
+  gridManager: {fileID: 1761114909}
+  spawnIndicatorColor: {r: 1, g: 0.3, b: 0.1, a: 0.85}
+  indicatorFlashSpeed: 2
+  indicatorTravelSpeed: 0.35
+  lineWidth: 0.06
+  pulseScale: 0.35
+  lineSortingOrderOffset: 9
+  pulseSortingOrderOffset: 10
+--- !u!114 &818457053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818457051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56def0d677148cc4687093688bedeb99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyObjectPrefab: {fileID: 8438325984699014015, guid: ac8d458e4884a774a835b7405f434d95, type: 3}
+  enemyWaves:
+  - enemyList:
+    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
+    count: 3
+    spawnInterval: 5
+    spawnEdge: 1
+    laneIndex: 1
+  - enemyList:
+    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
+    - {fileID: 11400000, guid: 65a58f2dcf61d0b43a43e88592cc8c6e, type: 2}
+    count: 8
+    spawnInterval: 5
+    spawnEdge: 0
+    laneIndex: 3
+  - enemyList:
+    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
+    - {fileID: 11400000, guid: 65a58f2dcf61d0b43a43e88592cc8c6e, type: 2}
+    - {fileID: 11400000, guid: 3f8ccf09c890b584fa9e5ed43da430ac, type: 2}
+    count: 10
+    spawnInterval: 4
+    spawnEdge: 2
+    laneIndex: 7
+  - enemyList:
+    - {fileID: 11400000, guid: b71619e1444d3ca46a47f9a705c56581, type: 2}
+    - {fileID: 11400000, guid: 65a58f2dcf61d0b43a43e88592cc8c6e, type: 2}
+    - {fileID: 11400000, guid: 3f8ccf09c890b584fa9e5ed43da430ac, type: 2}
+    - {fileID: 11400000, guid: 92a30100090ae2043b7ac2f5cfb1da05, type: 2}
+    count: 12
+    spawnInterval: 3
+    spawnEdge: 3
+    laneIndex: 2
+--- !u!4 &818457054
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818457051}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &856457364
 GameObject:
   m_ObjectHideFlags: 0
@@ -3248,7 +3248,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 999
   m_TargetDisplay: 0
 --- !u!224 &1739715525
 RectTransform:
@@ -3586,5 +3586,5 @@ SceneRoots:
   - {fileID: 231376428}
   - {fileID: 321140727}
   - {fileID: 1608615561}
-  - {fileID: 283140340}
+  - {fileID: 818457054}
   - {fileID: 73705594}

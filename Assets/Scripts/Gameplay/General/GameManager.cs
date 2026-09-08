@@ -35,12 +35,14 @@ public class GameManager : MonoBehaviour
     {
         startWaveButton.onClick.AddListener(StartCombat);
         PhaseChanged += HandlePhaseChangedForWaveText;
+        retryButton.onClick.AddListener(RetryGame);
     }
 
     private void OnDisable()
     {
         startWaveButton.onClick.RemoveListener(StartCombat);
         PhaseChanged -= HandlePhaseChangedForWaveText;
+        retryButton.onClick.RemoveListener(RetryGame);
     }
 
     private void Start()
@@ -83,7 +85,7 @@ public class GameManager : MonoBehaviour
         int totalWaves = EnemyManager.Instance.enemyWaves.Count;
 
         waveNumberText.text = currentWave >= totalWaves
-            ? $"WAVE {currentWave}/{totalWaves} (ENTERING ENDLESS MODE)"
+            ? "FINAL"
             : $"WAVE {currentWave}/{totalWaves}";
     }
 
@@ -99,7 +101,7 @@ public class GameManager : MonoBehaviour
         RefreshEnemyDestinationHealthText();
 
         if (currentEnemyDestinationHealth <= 0)
-            HandleEnemyDestinationHealthZero();
+            GameOver();
     }
 
     private void RefreshEnemyDestinationHealthText()
@@ -107,7 +109,7 @@ public class GameManager : MonoBehaviour
         enemyDestinationHealthText.text = $"Health {currentEnemyDestinationHealth}/{enemyDestinationMaxHealth}";
     }
 
-    private void HandleEnemyDestinationHealthZero()
+    public void GameOver()
     {
         Time.timeScale = 0f;
         currentEnemyDestinationHealth = 0;
@@ -116,7 +118,6 @@ public class GameManager : MonoBehaviour
         startWaveButton.gameObject.SetActive(false);
         gameOverPanel.SetActive(true);
     }
-
     public void RetryGame()
     {
         Time.timeScale = 1f;
