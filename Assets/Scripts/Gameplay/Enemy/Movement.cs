@@ -5,6 +5,7 @@ public class Movement : MonoBehaviour
 {
     private float moveSpeed;
     private Vector2 moveDirection;
+    public Vector2 MoveDirection => moveDirection;
     private Rigidbody2D body;
     private Transform destination;
     private bool isBlocked;

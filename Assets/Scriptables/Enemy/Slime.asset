@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Enemy
   sprite: {fileID: -7282886668606283007, guid: dc652b9e600a8724f9b1b28bff1e5c1e, type: 3}
-  maxHealth: 7
+  maxHealth: 5
   moveSpeed: 3
-  destinationDamage: 1
+  destinationDamage: 2
   goldReward: 1
   diamondReward: 0
-  attack: 2
+  attack: 1
   attackType: 1
   attackAreaWidth: 1
   attackAreaHeight: 1
   maxTargets: 1
-  attacksPerSecond: 3
+  attacksPerSecond: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 8
   projectileLifetime: 3

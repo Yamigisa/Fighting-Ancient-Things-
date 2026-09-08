@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Goblin
   sprite: {fileID: 8749302817991680212, guid: 6d3560e7a3bcbcd48b4101b57a1c3306, type: 3}
-  maxHealth: 4
+  maxHealth: 7
   moveSpeed: 4
   destinationDamage: 2
   goldReward: 2
   diamondReward: 0
-  attack: 1
+  attack: 2
   attackType: 0
   attackAreaWidth: 1
   attackAreaHeight: 3

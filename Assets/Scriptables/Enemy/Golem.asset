@@ -16,7 +16,7 @@ MonoBehaviour:
   sprite: {fileID: -3030794605390870092, guid: bfd2e10c4334e1040bac9b9188106b8c, type: 3}
   maxHealth: 20
   moveSpeed: 1
-  destinationDamage: 1
+  destinationDamage: 3
   goldReward: 2
   diamondReward: 0
   attack: 2
@@ -24,7 +24,7 @@ MonoBehaviour:
   attackAreaWidth: 1
   attackAreaHeight: 1
   maxTargets: 1
-  attacksPerSecond: 3
+  attacksPerSecond: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 8
   projectileLifetime: 3

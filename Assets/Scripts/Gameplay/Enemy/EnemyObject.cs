@@ -53,6 +53,12 @@ public class EnemyObject : MonoBehaviour
         if (!hasCustomPath && EnemyDestination.Instance != null)
             movement.SetDestination(EnemyDestination.Instance.transform);
 
+        // Tell the attack component which way we're facing so its grid range
+        // check is correct — without rotating the transform, which would conflict
+        // with the Rigidbody2D's FreezeRotation + Interpolate settings.
+        if (movement.MoveDirection.sqrMagnitude > 0.0001f)
+            attack.SetFacingDirection(movement.MoveDirection);
+
         if (HasReachedDestinationTile())
         {
             GameManager.Instance.ReceiveEnemyDestinationDamage(destinationDamage);

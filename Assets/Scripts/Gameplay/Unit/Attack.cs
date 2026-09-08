@@ -16,6 +16,8 @@ public class Attack : MonoBehaviour
     private float nextAttackTime;
     private readonly List<Health> contactTargets = new();
     private Health priorityTarget;
+    private Vector2 facingDirectionOverride;
+    private bool hasFacingOverride;
 
     public bool HasAttackArea => damage > 0 && areaSize.x > 0 && areaSize.y > 0;
 
@@ -57,6 +59,23 @@ public class Attack : MonoBehaviour
     public void SetPriorityTarget(Health target)
     {
         priorityTarget = target;
+    }
+
+    /// <summary>
+    /// Overrides the facing direction used for attack-range calculations.
+    /// Pass Vector2.zero to clear the override and revert to transform.up (used by player units).
+    /// </summary>
+    public void SetFacingDirection(Vector2 direction)
+    {
+        if (direction.sqrMagnitude > 0.0001f)
+        {
+            facingDirectionOverride = direction.normalized;
+            hasFacingOverride = true;
+        }
+        else
+        {
+            hasFacingOverride = false;
+        }
     }
 
     public void AddDamage(int amount)
@@ -210,7 +229,7 @@ public class Attack : MonoBehaviour
 
     private Vector2Int GetAttackDirection()
     {
-        Vector2 direction = transform.up;
+        Vector2 direction = hasFacingOverride ? facingDirectionOverride : (Vector2)transform.up;
 
         if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
             return new Vector2Int(direction.x > 0f ? 1 : -1, 0);
