@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
 public class UnitUICard : MonoBehaviour
 {
     [SerializeField] private Button buyUnitButton;
@@ -27,7 +28,7 @@ public class UnitUICard : MonoBehaviour
     private void OnEnable()
     {
         ResourceManager.Instance.ResourceChanged += HandleResourceChanged;
-        GamePhaseManager.PhaseChanged += HandlePhaseChanged;
+        GameManager.PhaseChanged += HandlePhaseChanged;
 
         RefreshBuyButton();
     }
@@ -35,7 +36,7 @@ public class UnitUICard : MonoBehaviour
     private void OnDisable()
     {
         ResourceManager.Instance.ResourceChanged -= HandleResourceChanged;
-        GamePhaseManager.PhaseChanged -= HandlePhaseChanged;
+        GameManager.PhaseChanged -= HandlePhaseChanged;
     }
 
     public void SetUnit(UnitSO unit, GameObject prefab)
@@ -59,14 +60,17 @@ public class UnitUICard : MonoBehaviour
             RefreshBuyButton();
     }
 
-    private void HandlePhaseChanged(GamePhase phase) => RefreshBuyButton();
+    private void HandlePhaseChanged(GamePhase phase)
+    {
+        RefreshBuyButton();
+    }
 
     private void RefreshBuyButton()
     {
         bool canAfford = unitSO != null &&
             ResourceManager.Instance != null &&
             ResourceManager.Instance.GetAmount(ResourceType.Gold) >= unitSO.cost &&
-            (GamePhaseManager.Instance == null || GamePhaseManager.Instance.IsBuildPhase);
+            GameManager.Instance.IsBuildPhase;
 
         buyUnitButton.interactable = canAfford;
         cardCanvasGroup.alpha = canAfford ? 1f : unaffordableAlpha;
@@ -74,7 +78,7 @@ public class UnitUICard : MonoBehaviour
 
     public void SelectUnit()
     {
-        if ((GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase) ||
+        if (!GameManager.Instance.IsBuildPhase ||
             unitSO == null || unitPrefab == null || ResourceManager.Instance == null ||
             ResourceManager.Instance.GetAmount(ResourceType.Gold) < unitSO.cost)
             return;

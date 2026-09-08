@@ -45,8 +45,6 @@ public class PlacementSystem : MonoBehaviour
 
         UpdateGhostPosition();
 
-        // The click that selected a placed unit must not also place its ghost
-        // back onto the same tile in the same frame.
         if (waitingForMoveSelectionClickRelease)
         {
             if (!Input.GetMouseButton(0))
@@ -73,7 +71,7 @@ public class PlacementSystem : MonoBehaviour
 
     public void StartPlacement(UnitSO unit, GameObject unitPrefab)
     {
-        if (GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase)
+        if (!GameManager.Instance.IsBuildPhase)
             return;
 
         if (unit == null || unitPrefab == null || !unitPrefab.TryGetComponent<UnitObject>(out _))
@@ -100,7 +98,7 @@ public class PlacementSystem : MonoBehaviour
     public void StartMovingUnit(UnitObject unit)
     {
         if (unit == null || unit.UnitData == null ||
-            (GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase))
+            !GameManager.Instance.IsBuildPhase)
         {
             return;
         }
@@ -118,8 +116,6 @@ public class PlacementSystem : MonoBehaviour
         selectedUnitPrefab = unit.gameObject;
         movingUnitOriginTile.SetOccupied(false);
 
-        // Clone while the source is active. Cloning it after SetActive(false)
-        // creates an inactive preview whose Awake has not initialized its components.
         ghostUnit = Instantiate(selectedUnitPrefab, unit.transform.position, unit.transform.rotation);
         unit.gameObject.SetActive(false);
         ConfigureGhost(ghostUnit);
@@ -172,8 +168,6 @@ public class PlacementSystem : MonoBehaviour
 
         if (hoveredTile == null)
         {
-            // Keep the preview following the cursor outside the grid, but mark it
-            // invalid so it cannot be mistaken for a placeable position.
             ghostUnit.transform.position = mouseWorldPosition;
             SetGhostColor(false);
 
@@ -192,7 +186,7 @@ public class PlacementSystem : MonoBehaviour
 
     private void TryPlaceSelectedUnit()
     {
-        if (GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase)
+        if (!GameManager.Instance.IsBuildPhase)
             return;
 
         if (hoveredTile == null || hoveredTile.IsOccupied || selectedUnit == null || selectedUnitPrefab == null)
@@ -240,7 +234,7 @@ public class PlacementSystem : MonoBehaviour
 
     private void TryStartMovingClickedUnit()
     {
-        if ((GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase) ||
+        if (!GameManager.Instance.IsBuildPhase ||
             sceneCamera == null)
         {
             return;

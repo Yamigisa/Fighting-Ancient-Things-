@@ -15,19 +15,22 @@ public class GoldProducer : MonoBehaviour
 
     private void OnEnable()
     {
-        GamePhaseManager.PhaseChanged += HandlePhaseChanged;
+        GameManager.PhaseChanged += HandlePhaseChanged;
 
-        SetProductionActive(GamePhaseManager.Instance != null && !GamePhaseManager.Instance.IsBuildPhase);
+        SetProductionActive(!GameManager.Instance.IsBuildPhase);
     }
 
     private void OnDisable()
     {
-        GamePhaseManager.PhaseChanged -= HandlePhaseChanged;
+        GameManager.PhaseChanged -= HandlePhaseChanged;
 
         SetProductionActive(false);
     }
 
-    private void HandlePhaseChanged(GamePhase phase) => SetProductionActive(phase == GamePhase.Combat);
+    private void HandlePhaseChanged(GamePhase phase)
+    {
+        SetProductionActive(phase == GamePhase.Combat);
+    }
 
     private void SetProductionActive(bool isActive)
     {

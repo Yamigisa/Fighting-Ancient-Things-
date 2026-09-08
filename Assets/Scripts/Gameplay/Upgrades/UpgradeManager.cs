@@ -28,14 +28,14 @@ public class UpgradeManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GamePhaseManager.PhaseChanged += HandlePhaseChanged;
+        GameManager.PhaseChanged += HandlePhaseChanged;
         if (closeUpgradeUIButton != null)
             closeUpgradeUIButton.onClick.AddListener(CloseUpgradeUI);
     }
 
     private void OnDisable()
     {
-        GamePhaseManager.PhaseChanged -= HandlePhaseChanged;
+        GameManager.PhaseChanged -= HandlePhaseChanged;
         if (closeUpgradeUIButton != null)
             closeUpgradeUIButton.onClick.RemoveListener(CloseUpgradeUI);
     }
@@ -147,7 +147,7 @@ public class UpgradeManager : MonoBehaviour
         if (upgradePanel == null || upgradeNodeUI == null || upgradeNodeUIParent == null)
         {
             Debug.LogError("Upgrade Manager is missing an Upgrade Panel, Upgrade Node UI prefab, or Upgrade Node UI Parent.", this);
-            GamePhaseManager.Instance?.SetPhase(GamePhase.Build);
+            GameManager.Instance.SetPhase(GamePhase.Build);
             return;
         }
 
@@ -157,7 +157,7 @@ public class UpgradeManager : MonoBehaviour
 
     private void CloseUpgradeUI()
     {
-        GamePhaseManager.Instance.SetPhase(GamePhase.Build);
+        GameManager.Instance.SetPhase(GamePhase.Build);
         upgradePanel.SetActive(false);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(GoldProducer))]
 public class UnitObject : MonoBehaviour
 {
+    [Header("Unit Data")]
     [SerializeField] private UnitSO unitSO;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
@@ -70,12 +71,12 @@ public class UnitObject : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        attack.SetRangePreviewVisible(true);
+        SetAttackRangeVisible(true);
     }
 
     private void OnMouseExit()
     {
-        attack.SetRangePreviewVisible(false);
+        SetAttackRangeVisible(false);
     }
 
     private void OnMouseDown()
@@ -95,7 +96,7 @@ public class UnitObject : MonoBehaviour
 
     private void TryStartMovingFromClick()
     {
-        if (GamePhaseManager.Instance == null || !GamePhaseManager.Instance.IsBuildPhase)
+        if (!GameManager.Instance.IsBuildPhase)
             return;
 
         if (PlacementSystem.Instance != null && !PlacementSystem.Instance.IsPlacementMode)
@@ -104,7 +105,9 @@ public class UnitObject : MonoBehaviour
 
     public void SetAttackRangeVisible(bool isVisible)
     {
-        attack ??= GetComponent<Attack>();
+        if (attack == null)
+            attack = GetComponent<Attack>();
+
         if (attack != null)
             attack.SetRangePreviewVisible(isVisible);
     }

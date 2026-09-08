@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "New Upgrade Node", menuName = "ScriptableObjects/Upgrade Node")]
 public class UpgradeNode : ScriptableObject
 {

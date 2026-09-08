@@ -4,10 +4,14 @@ using UnityEngine;
 [RequireComponent(typeof(Movement))]
 public class EnemyObject : MonoBehaviour
 {
-    public event System.Action<EnemyObject> Destroyed;
-    [SerializeField] private EnemySO enemySO;
-    [SerializeField] private Vector2 initialMoveDirection = Vector2.left;
+    [Header("Enemy Visual")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
+    public event System.Action<EnemyObject> Destroyed;
+    private EnemySO enemySO;
+    private Vector2 initialMoveDirection = Vector2.left;
+
+    private Health health;
     private Health blockingUnit;
     private Attack attack;
     private Movement movement;
@@ -22,16 +26,14 @@ public class EnemyObject : MonoBehaviour
         Collider2D bodyCollider = GetComponent<Collider2D>() ?? gameObject.AddComponent<CircleCollider2D>();
         bodyCollider.isTrigger = false;
 
-        Health health = GetComponent<Health>() ?? gameObject.AddComponent<Health>();
-        attack = GetComponent<Attack>() ?? gameObject.AddComponent<Attack>();
-        movement = GetComponent<Movement>() ?? gameObject.AddComponent<Movement>();
+        health = GetComponent<Health>();
+        attack = GetComponent<Attack>();
+        movement = GetComponent<Movement>();
+    }
 
-        if (enemySO == null)
-        {
-            Debug.LogError($"{name} is missing its EnemySO.", this);
-            enabled = false;
-            return;
-        }
+    public void Initialize(EnemySO data)
+    {
+        enemySO = data;
 
         health.Initialize(enemySO.maxHealth);
         attack.Initialize(health, enemySO.attack, new Vector2Int(enemySO.attackAreaWidth, enemySO.attackAreaHeight),
@@ -63,11 +65,9 @@ public class EnemyObject : MonoBehaviour
         movement.SetBlocked(false);
     }
 
-    public void ConfigurePath(GridEdge spawnEdge, EnemyPathMode pathMode)
+    public void ConfigurePath(GridEdge spawnEdge)
     {
-        hasCustomPath = pathMode == EnemyPathMode.StraightThenTurn;
-        if (!hasCustomPath || movement == null || EnemyDestination.Instance == null)
-            return;
+        hasCustomPath = true;
 
         Vector2 destinationPosition = EnemyDestination.Instance.transform.position;
         Vector2 firstCorner = spawnEdge is GridEdge.Bottom or GridEdge.Top
@@ -117,9 +117,9 @@ public class EnemyObject : MonoBehaviour
         if (ResourceManager.Instance == null)
             return;
 
-        if (goldReward > 0)
-            ResourceManager.Instance.CollectFromWorld(ResourceType.Gold, goldReward, transform.position);
-        if (diamondReward > 0)
-            ResourceManager.Instance.CollectFromWorld(ResourceType.Diamond, diamondReward, transform.position);
+        // if (goldReward > 0)
+        //     ResourceManager.Instance.CollectFromWorld(ResourceType.Gold, goldReward, transform.position);
+        // if (diamondReward > 0)
+        //     ResourceManager.Instance.CollectFromWorld(ResourceType.Diamond, diamondReward, transform.position);
     }
 }

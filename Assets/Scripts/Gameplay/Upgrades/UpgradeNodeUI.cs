@@ -18,8 +18,6 @@ public class UpgradeNodeUI : MonoBehaviour
 
     private void Awake()
     {
-        // The card's root is also its purchase button. This fallback keeps a
-        // missing prefab reference from preventing the upgrade phase from opening.
         if (acquireButton == null)
             acquireButton = GetComponent<Button>();
     }
